@@ -1,0 +1,72 @@
+extends ../layout
+
+- var formAction, buttonText
+
+block content
+  if itemAdded
+    .navbar
+      a.btn.btn-primary(href="/items") 
+        i.fa.fa-chevron-left 
+        | &nbsp; Back to list
+    - buttonText = 'Add Another'
+
+  .page-header
+
+  if updatingItem
+    - buttonText = 'Update'
+
+    h3 Edit 
+      = '"' + item.title + '"'
+
+  if newItem
+    - buttonText = 'Add'
+
+    h3 Add a New Item
+
+  if item
+    - formAction = "/items/single-item/"+item.id
+
+  form.form-horizontal(role='form', method='post', action=formAction, enctype="multipart/form-data")
+    input(type='hidden', name='_csrf', value=token)
+
+    .form-group
+      label(class='col-sm-2 control-label', for='name') Name
+      .col-sm-8
+        input.form-control(type='text', name='title', id='title', value=(item)? item.title : '',  autofocus=(updatingItem)? false : true)
+    
+    .form-group
+      
+      if item && item.imageName
+        label(class='col-sm-2 control-label', for='photo') Change Photo
+        .col-sm-2
+          img.item-thumbnail(src='/user-uploads/' + user.id + '/thumbnails/thumb-' + item.imageName)
+        .col-sm-6
+          input.form-control(type='file', name='photo', id='photo')
+      else 
+        label(class='col-sm-2 control-label', for='photo') Photo
+        .col-sm-8
+          input.form-control(type='file', name='photo', id='photo')
+
+    .form-group
+      label(class='col-sm-2 control-label', for='description') Description
+      .col-sm-8
+        textarea.form-control( name='description', id='description', rows="7")= (item)? item.description : ''
+
+    .form-group
+      label(class='col-sm-2 control-label', for='categories') Categories
+      .col-sm-8
+        input.form-control.categories( name='categories', id='categories', value=(item)? item.categories : '' )
+
+    .form-group
+      .col-sm-offset-2.col-sm-8
+        button.btn.btn-primary(type='submit')
+          i.fa.fa-check
+          | #{buttonText} Item
+
+
+block typeaheadJson
+  if user.allCategories
+    //- puts categories into string for catagory typeahead 
+    - var jsonString = JSON.stringify(user.allCategories)
+    script(type="text/javascript").
+      window.GlobalCategoryArray = !{jsonString}

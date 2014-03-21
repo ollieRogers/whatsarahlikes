@@ -1,0 +1,68 @@
+.navbar.navbar-default.navbar-fixed-top
+  .container
+    
+    .navbar-header
+      button.navbar-toggle(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+        span.sr-only Toggle navigation
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+
+    .collapse.navbar-collapse
+      ul.nav.navbar-nav
+        if !user 
+          li(class=title=='Home'?'active':undefined)
+            a(href='/') 
+              i.fa.fa-home 
+              | &nbsp;Home
+        if !user && secrets.localAuth
+          li(class=title=='Create Account'?'active':undefined)
+            a(href='/signup') 
+              i.fa.fa-plus 
+              | &nbsp; Create Account
+
+        if user
+          li(class=title=='Things You Like'?'active':undefined)
+            a(href='/items') 
+              i.fa.fa-list 
+              | &nbsp; Things You Like
+          li(class=title=='Something New That You Like'?'active':undefined)
+            a(href='/items/new-item') 
+              i.fa.fa-plus 
+              | &nbsp; Add a New Item
+              
+        li(class=title=='Contact'?'active':undefined)
+          a(href='/contact') 
+            i.fa.fa-envelope 
+            | &nbsp;Contact
+
+
+      ul.nav.navbar-nav.navbar-right
+        
+        if !user
+          li(class=title=='Login'?'active':undefined)
+            a(href='/login')
+              i.fa.fa-lock 
+              | &nbsp; Login
+          
+
+        
+        else
+          li.dropdown(class=title=='Account Management'?'active':undefined)
+            a.dropdown-toggle(href='#', data-toggle='dropdown')
+              
+              if user.profile.picture
+                img.profile-image(src='#{user.profile.picture}')
+              
+              else
+                img.profile-image(src='#{user.gravatar(60)}')
+              | #{user.profile.name || user.email || user.id}&nbsp;
+              i.caret
+            ul.dropdown-menu
+              li: a(href='/account') 
+                i.fa.fa-user 
+                | &nbsp; Your Account
+              li.divider
+              li: a(href='/logout') 
+                i.fa.fa-sign-out 
+                | &nbsp; Logout

@@ -1,0 +1,35 @@
+{
+  "name": "what-sarah-likes",
+  "version": "1.0.0",
+  "scripts": {
+    "start":       "node app.js",
+    "dev":         "NODE_ENV=development nodemon app.js",
+    "prod":        "NODE_ENV=production node app",
+    "cluster":     "NODE_ENV=production node cluster_app.js", 
+    "cluster-dev": "NODE_ENV=development nodemon cluster_app.js",
+    "live":        "NODE_ENV=production forever start app.js"
+  },
+  "dependencies": {
+    "async": "~0.2.10",
+    "bcrypt-nodejs": "~0.0.3",
+    "cheerio": "~0.13.1",
+    "connect-assets": "~2.5.4",
+    "express": "~3.4.8",
+    "express-flash": "~0.0.2",
+    "express-validator": "~1.0.1",
+    "jade": "~1.1.5",
+    "less": "~1.6.3",
+    "mongoose": "~3.8.7",
+    "nodemailer": "~0.6.0",
+    "passport": "~0.2.0",
+    "passport-local": "~0.1.6",
+    "request": "~2.34.0",
+    "underscore": "~1.6.0",
+    "connect-mongo": "~0.4.0",
+    "twilio": "~1.5.0",
+    "validator": "~3.2.1",
+    "crypto": "0.0.3",
+    "easyimage": "~0.1.6",
+    "mkdirps": "0.0.0"
+  }
+}

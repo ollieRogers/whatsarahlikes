@@ -1,0 +1,59 @@
+extends ../layout
+
+
+block content
+  - var dateString;
+  - var timeString;
+  - dateString = ('0' + item.dateAdded.getDate()).slice(-2) + '/' + ('0' + (item.dateAdded.getMonth()+1)).slice(-2) + '/' + item.dateAdded.getFullYear() // get the date the item was added
+  - timeString = ('0' + item.dateAdded.getHours()).slice(-2) + ':' + ('0' + (item.dateAdded.getMinutes()+1)).slice(-2) // get the time the item was added
+
+  .navbar 
+    ul.nav.navbar-left.navbar-nav
+      li
+        a(href="/items/") 
+          i.fa.fa-list 
+          | Back to full list
+      li
+        a(href="/items/single-item/"+item.id) 
+          i.fa.fa-pencil-square-o 
+          | Edit This Item
+     ul.nav.navbar-right.navbar-nav     
+      li
+        a.delete(href="/items/delete-item/"+item.id) 
+          i.fa.fa-trash-o
+          | Delete This Item
+
+  .detail-content.clx     
+
+    if item.imageName
+      .detail-image
+        img.item-image-thumb.lazy(src="/img/loader.png", data-toggle="modal", data-target="#imageModal", data-src='/user-uploads/' + user.id + '/thumbnails/thumb-' + item.imageName, alt="image for - #{item.title}", title="#{item.title}")
+
+    .detail
+      h1.detail-title #{item.title}
+      if item.description  
+        p.description #{item.description}
+
+      if item.categories
+        .category-tags
+          span Categories: 
+          each tag in item.categories
+            a.badge(href="/items/tag/"+tag) #{tag} 
+            |  
+
+      .date-title 
+        span Added:   
+        span.time  #{timeString}
+        span.sep= ' on '
+        span.date #{dateString}
+
+
+
+block modal 
+  #imageModal.modal.fade(role='dialog', aria-labelledby='Large Image', aria-hidden='true')
+    .modal-dialog
+        .modal-content
+          .modal-body
+            button.close(type='button', data-dismiss='modal', aria-hidden='true') 
+              i.fa.fa-times
+            img.item-image-thumb.lazy(src="/img/loader.png", data-src='/user-uploads/' + user.id + '/fullsized/' + item.imageName, alt="image for - #{item.title}", title="#{item.title}")

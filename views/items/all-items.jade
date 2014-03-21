@@ -1,0 +1,99 @@
+extends ../layout
+
+block content
+
+  .page-header
+    if !displayByCategory
+      h2 Things You like
+    if displayByCategory
+      h2 Items tagged 
+        span.category-name #{category}
+  #list-items.page-content
+    .navbar 
+      ul.nav.navbar-nav
+        if displayByCategory || deletedItems
+          li
+            a(href="/items/") 
+              i.fa.fa-list 
+              | Back to full list
+        li
+          a(href="/items/new-item") 
+            i.fa.fa-plus
+            | Add a new item
+        if !deletedItems
+          li
+            a(href="/items/deleted") 
+              i.fa.fa-trash-o 
+              | Show Deleted Items
+        
+    
+    if items.length > 0
+       - var loopIndex = 0 
+       #all-items.row  
+        each item in items
+          - var dateObj = item.dateAdded;
+          - loopIndex += 1 // increment this so we can add a clearfix
+          - var dateString;
+          - var timeString;
+          - var itemCategoryTags;
+
+          - dateString = ('0' + dateObj.getDate()).slice(-2) + '/' + ('0' + (dateObj.getMonth()+1)).slice(-2) + '/' + dateObj.getFullYear() // get the date the item was added
+
+          - timeString = ('0' + dateObj.getHours()).slice(-2) + ':' + ('0' + (dateObj.getMinutes()+1)).slice(-2) // get the time the item was added
+
+          - itemCategoryTags = item.categories  // make category tags pretty
+
+          .col-md-4
+            .panel.panel-default
+              .panel-heading
+                a.title(href="/items/single-item-detail/"+item.id)
+                  i.fa.fa-angle-right
+                  span #{item.title}
+              .item-image-wrap
+                a.title(href="/items/single-item-detail/"+item.id)
+                  if item.imageName
+                    img.item-image.lazy(src="/img/loader.png", data-src='/user-uploads/' + user.id + '/thumbnails/thumb-' + item.imageName, alt="image for - #{item.title}", title="#{item.title}")
+                  else 
+                    img.item-image(src="/img/loader.png", alt="image for - #{item.title}", title="#{item.title}")
+              .panel-body 
+                if item.shortDesc
+                  .snippet.item-desc.clx
+                    .item-label Description: 
+                    .item-cont #{item.shortDesc}
+                if itemCategoryTags.length > 0
+                  .category-tags.item-desc.clx
+                    .item-label Categories: 
+                    .item-cont
+                      each tag in itemCategoryTags
+                        a(href="/items/tag/"+tag, class= + (category === tag)? 'badge on' : 'badge'  ) #{tag}
+                .added-date.item-desc.clx
+                  .date-title
+                    .item-label Added:   
+                    .item-cont
+                      span.time  #{timeString}
+                      span.sep= ' on '
+                      span.date #{dateString}
+            
+              .panel-footer
+                if !deletedItems
+                  a.edit-item.btn.btn-md.btn-primary(href="/items/single-item-detail/"+item.id)
+                    i.fa.fa-eye
+                    | Details
+                  a.edit-item.btn.btn-md.btn-info(href="/items/single-item/"+item.id)
+                    i.fa.fa-pencil-square-o
+                    | Edit
+                  a.delete-item.btn.btn-md.btn-danger(href="/items/delete-item/"+item.id)
+                    i.fa.fa-times
+                    | Delete
+                if deletedItems
+                  a.delete-item.btn.btn-sm.btn-warning(href="/items/undo-delete/"+item.id)
+                    i.fa.fa-undo
+                    | Undo Delete
+
+
+          if loopIndex%3 ==0 
+            .clx 
+
+
+
+

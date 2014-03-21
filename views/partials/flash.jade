@@ -1,0 +1,37 @@
+#flash
+  if messages.errors
+    .alert.alert-danger.animated.fadeIn
+      button(type="button", class="close", data-dismiss="alert", aria-hidden="true") &times;
+      for error in messages.errors
+        div= error.msg
+  
+  if messages.info
+    .alert.alert-info.animated.fadeIn
+      button(type="button", class="close", data-dismiss="alert", aria-hidden="true") &times;
+      for info in messages.info
+        div= info.msg
+  
+  if messages.success
+    .alert.alert-success.animated.fadeIn
+      button(type="button", class="close", data-dismiss="alert", aria-hidden="true") &times;
+      for success in messages.success
+        div= success.msg
+  
+  if messages.deleted
+    .alert.alert-danger.animated.fadeIn
+      button(type="button", class="close", data-dismiss="alert", aria-hidden="true") &times;
+      for deleted in messages.deleted
+        div   
+          a.btn.btn-md.btn-danger(href="/items/undo-delete/"+deleted.deletedItemId) 
+            i.fa.fa-undo
+            | Undo Delete
+          strong Deleted: 
+          span #{deleted.msg} 
+
+  if messages.undo
+    .alert.alert-info.animated.fadeIn
+      button(type="button", class="close", data-dismiss="alert", aria-hidden="true") &times;
+      for undo in messages.undo
+        strong Undo successful: "
+        span #{undo.msg}
+        | " has been added back to your list
